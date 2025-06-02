@@ -1,6 +1,9 @@
 <?php
 
-require "./Router.php";
+require __DIR__."/../vendor/autoload.php";
+
+use Noovin\HttpNotFoundException;
+use Noovin\Router;
 
 $router = new Router();
 
