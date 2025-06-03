@@ -8,11 +8,21 @@
             "Noovin\\": "src/Noovin"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Noovin\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "tests": "phpunit --color=always --testdox tests/"
+    },
     "authors": [
         {
             "name": "hdz-kevin",
             "email": "kevinhdez592@gmail.com"
         }
     ],
-    "require": {}
+    "require-dev": {
+        "phpunit/phpunit": "^11.5"
+    }
 }

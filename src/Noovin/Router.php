@@ -3,7 +3,8 @@
 namespace Noovin;
 
 class Router {
-    protected array $routes;
+    /** @property array<string, array<string, \Closure>> $routes */
+    protected array $routes = [];
 
     public function __construct()
     {
@@ -14,12 +15,9 @@ class Router {
         }
     }
 
-    public function resolve(): callable
+    public function resolve(string $uri, HttpMethod $method): callable
     {
-        $method = $_SERVER["REQUEST_METHOD"];
-        $uri = $_SERVER["REQUEST_URI"];
-
-        $action = $this->routes[$method][$uri] ?? null;
+        $action = $this->routes[$method->value][$uri] ?? null;
 
         if (is_null($action)) {
             throw new HttpNotFoundException();
