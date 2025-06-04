@@ -10,10 +10,14 @@ $router = new Router();
 
 $router->get('/users', fn () => "GET OK");
 $router->post('/users', fn () => "POST OK");
-$router->post('/users/1/update', fn () => "POST 2 OK");
+$router->post('/users/{user}/update', fn () => "POST 2 OK");
 
 try {
-    $action = $router->resolve($_SERVER["REQUEST_URI"], HttpMethod::from($_SERVER["REQUEST_METHOD"]));
+    $action = $router->resolve(
+        $_SERVER["REQUEST_URI"],
+        HttpMethod::from($_SERVER["REQUEST_METHOD"])
+    )->action();
+
     print_r($action());
 } catch (HttpNotFoundException|ValueError $e) {
     http_response_code(404);
