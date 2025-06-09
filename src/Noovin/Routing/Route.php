@@ -1,8 +1,9 @@
 <?php
 
-namespace Noovin;
+namespace Noovin\Routing;
 
-class Route {
+class Route
+{
     protected string $uri;
 
     protected \Closure $action;

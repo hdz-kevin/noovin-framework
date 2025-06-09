@@ -1,6 +1,8 @@
 <?php
 
-namespace Noovin;
+namespace Noovin\Http;
+
+use Noovin\Server\Server;
 
 class Request {
     /**

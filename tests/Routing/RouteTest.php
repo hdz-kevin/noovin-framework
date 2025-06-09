@@ -2,7 +2,7 @@
 
 namespace Noovin\Tests;
 
-use Noovin\Route;
+use Noovin\Routing\Route;
 use PHPUnit\Framework\TestCase;
 
 class RouteTest extends TestCase

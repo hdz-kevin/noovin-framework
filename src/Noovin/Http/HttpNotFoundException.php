@@ -1,5 +1,5 @@
 <?php
 
-namespace Noovin;
+namespace Noovin\Http;
 
 class HttpNotFoundException extends \Exception { }

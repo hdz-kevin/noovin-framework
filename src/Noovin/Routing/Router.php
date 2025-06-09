@@ -1,6 +1,10 @@
 <?php
 
-namespace Noovin;
+namespace Noovin\Routing;
+
+use Noovin\Http\HttpMethod;
+use Noovin\Http\HttpNotFoundException;
+use Noovin\Http\Request;
 
 class Router {
     /**

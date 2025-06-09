@@ -1,6 +1,8 @@
 <?php
 
-namespace Noovin;
+namespace Noovin\Server;
+
+use Noovin\Http\HttpMethod;
 
 class PhpNativeServer implements Server
 {

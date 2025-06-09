@@ -2,13 +2,14 @@
 
 namespace Noovin\Tests;
 
-use Noovin\HttpMethod;
-use Noovin\Request;
-use Noovin\Router;
-use Noovin\Server;
+use Noovin\Http\HttpMethod;
+use Noovin\Http\Request;
+use Noovin\Routing\Router;
+use Noovin\Server\Server;
 use PHPUnit\Framework\TestCase;
 
-class RouterTest extends TestCase {
+class RouterTest extends TestCase
+{
     private function createMockRequest(string $uri, HttpMethod $method): Request
     {
         $server = $this->getMockBuilder(Server::class)->getMock();

@@ -2,10 +2,10 @@
 
 require __DIR__."/../vendor/autoload.php";
 
-use Noovin\HttpNotFoundException;
-use Noovin\PhpNativeServer;
-use Noovin\Request;
-use Noovin\Router;
+use Noovin\Http\HttpNotFoundException;
+use Noovin\Http\Request;
+use Noovin\Server\PhpNativeServer;
+use Noovin\Routing\Router;
 
 $router = new Router();
 
