@@ -5,10 +5,19 @@ namespace Noovin\Tests;
 use Noovin\HttpMethod;
 use Noovin\Request;
 use Noovin\Router;
+use Noovin\Server;
 use PHPUnit\Framework\TestCase;
 
-class RouterTest extends TestCase
-{
+class RouterTest extends TestCase {
+    private function createMockRequest(string $uri, HttpMethod $method): Request
+    {
+        $server = $this->getMockBuilder(Server::class)->getMock();
+        $server->method('requestUri')->willReturn($uri);
+        $server->method('requestMethod')->willReturn($method);
+
+        return new Request($server);
+    }
+
     public function test_resolve_basic_route_with_callback_action()
     {
         $uri = "/users";
@@ -16,7 +25,7 @@ class RouterTest extends TestCase
         $router = new Router();
         $router->get($uri, $action);
 
-        $route = $router->resolve(new Request(new MockServer($uri, HttpMethod::GET)));
+        $route = $router->resolve($this->createMockRequest($uri, HttpMethod::GET));
         $this->assertEquals($uri, $route->uri());
         $this->assertEquals($action, $route->action());
     }
@@ -36,7 +45,7 @@ class RouterTest extends TestCase
         }
 
         foreach ($routes as $uri => $action) {
-            $route = $router->resolve(new Request(new MockServer($uri, HttpMethod::GET)));
+            $route = $router->resolve($this->createMockRequest($uri, HttpMethod::GET));
             $this->assertEquals($uri, $route->uri());
             $this->assertEquals($action, $route->action());
         }
@@ -63,7 +72,7 @@ class RouterTest extends TestCase
         }
 
         foreach ($routes as [$method, $uri, $action]) {
-            $route = $router->resolve(new Request(new MockServer($uri, $method)));
+            $route = $router->resolve($this->createMockRequest($uri, $method));
             $this->assertEquals($uri, $route->uri());
             $this->assertEquals($action, $route->action());
         }

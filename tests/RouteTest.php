@@ -5,8 +5,8 @@ namespace Noovin\Tests;
 use Noovin\Route;
 use PHPUnit\Framework\TestCase;
 
-class RouteTest extends TestCase {
-
+class RouteTest extends TestCase
+{
     public static function routesWithoutParameters(): array
     {
         return [
