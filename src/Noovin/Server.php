@@ -2,24 +2,13 @@
 
 namespace Noovin;
 
-class Server {
-    public function requestUri(): string
-    {
-        return parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
-    }
+interface Server
+{
+    public function requestUri(): string;
 
-    public function requestMethod(): HttpMethod
-    {
-        return HttpMethod::from($_SERVER["REQUEST_METHOD"]);
-    }
+    public function requestMethod(): HttpMethod;
 
-    public function requestBody(): array
-    {
-        return $_POST;
-    }
+    public function requestBody(): array;
 
-    public function queryParams(): array
-    {
-        return $_GET;
-    }
+    public function queryParams(): array;
 }
