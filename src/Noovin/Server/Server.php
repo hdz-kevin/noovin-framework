@@ -3,6 +3,7 @@
 namespace Noovin\Server;
 
 use Noovin\Http\HttpMethod;
+use Noovin\Http\Response;
 
 interface Server
 {
@@ -13,4 +14,6 @@ interface Server
     public function requestBody(): array;
 
     public function queryParams(): array;
+
+    public function sendResponse(Response $response): void;
 }
