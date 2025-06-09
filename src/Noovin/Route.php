@@ -15,14 +15,20 @@ class Route {
     {
         $this->uri = $uri;
         $this->action = $action;
-        $this->regex = preg_replace("/\{([a-zA-Z-]+)\}/", "([a-zA-Z0-9]+)", $this->uri);
-        preg_match_all("/\{([a-zA-Z-]+)\}/", $this->uri, $parameters);
+
+        if (str_ends_with($this->uri, "/") && $this->uri !== "/") {
+            // Remove trailing slash if it's not the root URI
+            $this->uri = rtrim($this->uri, "/");
+        }
+
+        $this->regex = preg_replace("/\{([a-zA-Z]+)\}/", "([a-zA-Z0-9]+)", $this->uri);
+        preg_match_all("/\{([a-zA-Z]+)\}/", $this->uri, $parameters);
         $this->parameters = $parameters[1];
     }
 
     public function matches(string $uri): bool
     {
-        return preg_match("#^$this->regex$#", $uri);
+        return preg_match("#^$this->regex/?$#", $uri);
     }
 
     public function hasParameters(): bool
@@ -32,7 +38,7 @@ class Route {
 
     public function parseParameters(string $uri): array
     {
-        preg_match("#^$this->regex$#", $uri, $args);
+        preg_match("#^$this->regex/?$#", $uri, $args);
 
         return array_combine($this->parameters, array_slice($args, 1));
     }
