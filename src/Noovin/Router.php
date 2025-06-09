@@ -17,10 +17,10 @@ class Router {
         }
     }
 
-    public function resolve(string $uri, HttpMethod $method): Route
+    public function resolve(Request $request): Route
     {
-        foreach ($this->routes[$method->value] as $route) {
-            if ($route->matches($uri)) {
+        foreach ($this->routes[$request->method()->value] as $route) {
+            if ($route->matches($request->uri())) {
                 return $route;
             }
         }
