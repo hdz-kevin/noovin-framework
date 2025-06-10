@@ -5,28 +5,46 @@ namespace Noovin\Server;
 use Noovin\Http\HttpMethod;
 use Noovin\Http\Response;
 
+/**
+ * PHP native server that uses `$_SERVER` superglobal.
+ */
 class PhpNativeServer implements Server
 {
+    /**
+     * @inheritDoc
+     */
     public function requestUri(): string
     {
         return parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function requestMethod(): HttpMethod
     {
         return HttpMethod::from($_SERVER["REQUEST_METHOD"]);
     }
 
-    public function requestBody(): array
+    /**
+     * @inheritDoc
+     */
+    public function postData(): array
     {
         return $_POST;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function queryParams(): array
     {
         return $_GET;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function sendResponse(Response $response): void
     {
         // PHP sends Content-Type header by default, but it has to be removed if

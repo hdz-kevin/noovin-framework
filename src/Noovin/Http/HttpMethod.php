@@ -2,7 +2,11 @@
 
 namespace Noovin\Http;
 
-enum HttpMethod: string {
+/**
+ * Enum representing HTTP methods.
+ */
+enum HttpMethod: string
+{
     case GET = "GET";
     case POST = "POST";
     case PUT = "PUT";
