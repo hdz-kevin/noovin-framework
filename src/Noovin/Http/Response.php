@@ -25,9 +25,9 @@ class Response
     /**
      * Prepare the response to be sent to the client.
      *
-     * @return void
+     * @return self
      */
-    public function prepare(): void
+    public function prepare(): self
     {
         if (is_null($this->content)) {
             $this->removeHeader("Content-Type");
@@ -35,6 +35,8 @@ class Response
         } else {
             $this->setHeader("Content-Length", strlen($this->content));
         }
+
+        return $this;
     }
 
     /**
