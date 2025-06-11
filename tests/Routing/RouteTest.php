@@ -36,8 +36,8 @@ class RouteTest extends TestCase
      */
     public function test_regex_on_uri_ends_with_slash(string $uri)
     {
-        $route = new Route("$uri/", fn () => "test");
-        $this->assertTrue($route->matches($uri));
+        $route = new Route($uri, fn () => "test");
+        $this->assertTrue($route->matches("$uri/"));
     }
 
     public static function routesWithParameters(): array
