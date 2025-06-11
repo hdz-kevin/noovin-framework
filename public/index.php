@@ -10,24 +10,26 @@ use Noovin\Routing\Router;
 
 $router = new Router();
 
-$router->get('/users', function () {
+$router->get('/users', function (Request $request) {
     return Response::json([
         "message" => "GET OK",
     ]);
 });
+$router->get('/query', fn (Request $request) => Response::json($request->query()));
 
-$router->get('/users/{user}/update', function () {
-    return Response::redirect("/users");
-});
+$router->get('/redirect', fn (Request $request) => Response::redirect("/auth/login"));
 
-$router->post('/users', fn () => "POST OK");
-$router->post('/users/{user}/update', fn () => "POST 2 OK");
+$router->post('/users', fn (Request $request) => Response::json([
+    "data" => $request->data(),
+    "query" => $request->query(),
+]));
 
 $server = new PhpNativeServer();
 
 try {
-    $action = $router->resolve(new Request($server))->action();
-    $server->sendResponse($action());
+    $request = $server->request();
+    $action = $router->resolve($request)->action();
+    $server->sendResponse($action($request));
 } catch (HttpNotFoundException | ValueError $e) {
     $response = Response::text("404 Not Found")->setStatus(404);
     $server->sendResponse($response);

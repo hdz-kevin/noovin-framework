@@ -3,6 +3,7 @@
 namespace Noovin\Server;
 
 use Noovin\Http\HttpMethod;
+use Noovin\Http\Request;
 use Noovin\Http\Response;
 
 /**
@@ -12,32 +13,11 @@ use Noovin\Http\Response;
 interface Server
 {
     /**
-     * Get request URI.
+     * Get the current HTTP request.
      *
-     * @return string
+     * @return Request
      */
-    public function requestUri(): string;
-
-    /**
-     * Get request method.
-     *
-     * @return HttpMethod
-     */
-    public function requestMethod(): HttpMethod;
-    
-    /**
-     * Get request POST data.
-     *
-     * @return array
-     */
-    public function postData(): array;
-
-    /**
-     * Get request query parameters.
-     *
-     * @return array
-     */
-    public function queryParams(): array;
+    public function request(): Request;
 
     /**
      * Send the HTTP response to the client.
