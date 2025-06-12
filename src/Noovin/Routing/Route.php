@@ -70,7 +70,7 @@ class Route
      * @return array<string, mixed>
      */
     public function parseParameters(string $uri): array
-{
+    {
         preg_match("#^$this->regex/?$#", $uri, $args);
 
         return array_combine($this->parameters, array_slice($args, 1));

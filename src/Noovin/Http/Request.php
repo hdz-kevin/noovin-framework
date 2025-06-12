@@ -76,6 +76,20 @@ class Request
     }
 
     /**
+     * Get request route parameters.
+     * If a key is provided, returns the value for that key or null if it does not exist.
+     *
+     * @param string|null $key
+     * @return array|string|null
+     */
+    public function parameters(?string $key = null): array|string|null
+    {
+        $params = $this->route->parseParameters($this->uri);
+
+        return $key === null ? $params : ($params[$key] ?? null);
+    }
+
+    /**
      * Get the request HTTP method.
      *
      * @return HttpMethod
@@ -99,12 +113,14 @@ class Request
 
     /**
      * Get POST data.
+     * If a key is provided, returns the value for that key or null if it does not exist.
      *
-     * @return array
+     * @param string|null $key
+     * @return array|string|null
      */
-    public function data(): array
+    public function data(?string $key = null): array|string|null
     {
-        return $this->data;
+        return $key === null ? $this->data : ($this->data[$key] ?? null);
     }
 
     /**
@@ -120,13 +136,15 @@ class Request
     }
 
     /**
-     * Get all query parameters.
+     * Get query parameters.
+     * If a key is provided, returns the value for that key or null if it does not exist.
      *
-     * @return array
+     * @param string|null $key
+     * @return array|string|null
      */
-    public function query(): array
+    public function query(?string $key = null): array|string|null
     {
-        return $this->query;
+        return $key === null ? $this->query : ($this->query[$key] ?? null);
     }
 
     /**

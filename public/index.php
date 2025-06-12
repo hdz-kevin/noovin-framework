@@ -10,26 +10,28 @@ use Noovin\Routing\Router;
 
 $router = new Router();
 
-$router->get('/users', function (Request $request) {
+$router->get("/users", function (Request $req) {
     return Response::json([
         "message" => "GET OK",
     ]);
 });
-$router->get('/query', fn (Request $request) => Response::json($request->query()));
+$router->get("/query", fn (Request $req) => Response::json(["param" => $req->query("page")]));
 
-$router->get('/redirect', fn (Request $request) => Response::redirect("/auth/login"));
+$router->get("/redirect", fn (Request $req) => Response::redirect("/auth/login"));
 
-$router->post('/users', fn (Request $request) => Response::json([
-    "data" => $request->data(),
-    "query" => $request->query(),
+$router->get("/users/{username}/posts/{postId}", fn (Request $req) => Response::json([
+    "params" => $req->parameters(),
 ]));
+
+$router->post("/users", fn (Request $req) => Response::json(["name" => $req->data("name")]));
 
 $server = new PhpNativeServer();
 
 try {
     $request = $server->request();
-    $action = $router->resolve($request)->action();
-    $server->sendResponse($action($request));
+    $route = $router->resolve($request);
+    $request->setRoute($route);
+    $server->sendResponse($route->action()($request));
 } catch (HttpNotFoundException | ValueError $e) {
     $response = Response::text("404 Not Found")->setStatus(404);
     $server->sendResponse($response);
