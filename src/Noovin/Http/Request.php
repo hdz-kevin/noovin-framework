@@ -12,7 +12,7 @@ class Request
     protected string $uri;
 
     /**
-     * @var Route Route matched for this request.
+     * @var \Noovin\Routing\Route Route matched for this request.
      */
     protected Route $route;
 
@@ -20,6 +20,11 @@ class Request
      * @var HttpMethod HTTP method used for this request.
      */
     protected HttpMethod $method;
+
+    /**
+     * @var string[] HTTP headers.
+     */
+    protected array $headers = [];
 
     /**
      * @var array POST data.
@@ -108,6 +113,30 @@ class Request
     public function setMethod(HttpMethod $method): self
     {
         $this->method = $method;
+        return $this;
+    }
+
+    /**
+     * Get HTTP headers.
+     * If a key is provided, returns the value for that key or null if it does not exist.
+     *
+     * @param string|null $key
+     * @return array|string|null
+     */
+    public function headers(?string $key = null): array|string|null
+    {
+        return $key === null ? $this->headers : ($this->headers[strtolower($key)] ?? null);
+    }
+
+    /**
+     * Set HTTP headers.
+     *
+     * @param array<string, string> $headers
+     * @return self
+     */
+    public function setHeaders(array $headers): self
+    {
+        $this->headers = array_map('strtolower', $headers);
         return $this;
     }
 

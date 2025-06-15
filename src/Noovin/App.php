@@ -10,6 +10,9 @@ use Noovin\Routing\Router;
 use Noovin\Server\PhpNativeServer;
 use Noovin\Server\Server;
 
+/**
+ * The main application class that initializes the router, server, and request.
+ */
 class App
 {
     public Router $router;
@@ -18,7 +21,7 @@ class App
 
     public Server $server;
 
-    public static function bootstrap()
+    public static function bootstrap(): self
     {
         $app = Container::singleton(self::class);
         $app->router = new Router();
@@ -31,9 +34,8 @@ class App
     public function run()
     {
         try {
-            $route = $this->router->resolve($this->request);
-            $this->request->setRoute($route);
-            $this->server->sendResponse($route->action()($this->request));
+            $response = $this->router->resolve($this->request);
+            $this->server->sendResponse($response);
         } catch (HttpNotFoundException | \ValueError $e) {
             $response = Response::text("404 Not Found")->setStatus(404);
             $this->server->sendResponse($response);

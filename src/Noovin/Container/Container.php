@@ -6,14 +6,16 @@ class Container
 {
     private static array $instances = [];
 
-    public static function singleton(string $class)
+    public static function singleton(string $class): object
     {
-        self::$instances[$class] ??= new $class();
+        if (! array_key_exists($class, self::$instances)) {
+            self::$instances[$class] = new $class;
+        }
 
         return self::$instances[$class];
     }
 
-    public static function resolve(string $class)
+    public static function resolve(string $class): object|null
     {
         return self::$instances[$class] ?? null;
     }

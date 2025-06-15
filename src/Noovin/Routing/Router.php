@@ -5,6 +5,7 @@ namespace Noovin\Routing;
 use Noovin\Http\HttpMethod;
 use Noovin\Http\HttpNotFoundException;
 use Noovin\Http\Request;
+use Noovin\Http\Response;
 
 /**
  * Router class for handling HTTP routes.
@@ -31,19 +32,32 @@ class Router
     /**
      * Resolve the route for the given request.
      *
-     * @param Request $request
+     * @param Request $req
      * @return Route
      * @throws HttpNotFoundException
      */
-    public function resolve(Request $request): Route
+    public function resolveRoute(Request $req): Route
     {
-        foreach ($this->routes[$request->method()->value] as $route) {
-            if ($route->matches($request->uri())) {
+        foreach ($this->routes[$req->method()->value] as $route) {
+            if ($route->matches($req->uri())) {
                 return $route;
             }
         }
 
         throw new HttpNotFoundException();
+    }
+
+    public function resolve(Request $req): Response
+    {
+        $route = $this->resolveRoute($req);
+        $req->setRoute($route);
+        $action = $route->action();
+
+        if ($route->hasMiddlewares()) {
+            // Run middlewares before the final action
+        }
+
+        return $action($req);
     }
 
     /**
@@ -52,11 +66,14 @@ class Router
      * @param HttpMethod $method
      * @param string $uri
      * @param \Closure $action
-     * @return void
+     * @return Route
      */
-    protected function registerRoute(HttpMethod $method, string $uri, \Closure $action): void
+    protected function registerRoute(HttpMethod $method, string $uri, \Closure $action): Route
     {
-        $this->routes[$method->value][] = new Route($uri, $action);
+        $route = new Route($uri, $action);
+        $this->routes[$method->value][] = $route;
+
+        return $route;
     }
 
     /**
@@ -64,11 +81,11 @@ class Router
      *
      * @param string $uri
      * @param \Closure $action
-     * @return void
+     * @return Route
      */
-    public function get(string $uri, \Closure $action): void
+    public function get(string $uri, \Closure $action): Route
     {
-        $this->registerRoute(HttpMethod::GET, $uri, $action);
+        return $this->registerRoute(HttpMethod::GET, $uri, $action);
     }
 
     /**
@@ -76,11 +93,11 @@ class Router
      *
      * @param string $uri
      * @param \Closure $action
-     * @return void
+     * @return Route
      */
-    public function post(string $uri, \Closure $action): void
+    public function post(string $uri, \Closure $action): Route
     {
-        $this->registerRoute(HttpMethod::POST, $uri, $action);
+        return $this->registerRoute(HttpMethod::POST, $uri, $action);
     }
 
     /**
@@ -88,11 +105,11 @@ class Router
      *
      * @param string $uri
      * @param \Closure $action
-     * @return void
+     * @return Route
      */
-    public function put(string $uri, \Closure $action): void
+    public function put(string $uri, \Closure $action): Route
     {
-        $this->registerRoute(HttpMethod::PUT, $uri, $action);
+        return $this->registerRoute(HttpMethod::PUT, $uri, $action);
     }
 
     /**
@@ -100,11 +117,11 @@ class Router
      *
      * @param string $uri
      * @param \Closure $action
-     * @return void
+     * @return Route
      */
-    public function patch(string $uri, \Closure $action): void
+    public function patch(string $uri, \Closure $action): Route
     {
-        $this->registerRoute(HttpMethod::PATCH, $uri, $action);
+        return $this->registerRoute(HttpMethod::PATCH, $uri, $action);
     }
 
     /**
@@ -112,10 +129,10 @@ class Router
      *
      * @param string $uri
      * @param \Closure $action
-     * @return void
+     * @return Route
      */
-    public function delete(string $uri, \Closure $action): void
+    public function delete(string $uri, \Closure $action): Route
     {
-        $this->registerRoute(HttpMethod::DELETE, $uri, $action);
+        return $this->registerRoute(HttpMethod::DELETE, $uri, $action);
     }
 }

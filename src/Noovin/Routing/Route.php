@@ -2,6 +2,8 @@
 
 namespace Noovin\Routing;
 
+use Noovin\Container\Container;
+
 /**
  * Contains a uri definition and its associated action.
  */
@@ -26,6 +28,11 @@ class Route
      * @var string[] Route parameter names.
      */
     protected array $parameters;
+
+    /**
+     * @var \Noovin\Http\Middlewares\Middleware[] Middlewares to be applied to the route.
+     */
+    protected array $middlewares = [];
 
     /**
      * Create a new Route instance with the given URI and action.
@@ -77,6 +84,38 @@ class Route
     }
 
     /**
+     * Check if the route has any middlewares.
+     *
+     * @return bool
+     */
+    public function hasMiddlewares(): bool
+    {
+        return count($this->middlewares) > 0;
+    }
+
+    /**
+     * Get all HTTP middlewares associated with this route.
+     *
+     * @return \Noovin\Http\Middlewares\Middleware[]
+     */
+    public function middlewares(): array
+    {
+        return $this->middlewares;
+    }
+
+    /**
+     * Set the HTTP middlewares to be applied to this route.
+     *
+     * @param string[] $middlewares Array of middleware class names.
+     * @return \Noovin\Routing\Route
+     */
+    public function setMiddlewares(array $middlewares): self
+    {
+        $this->middlewares = array_map(fn (string $middleware) => new $middleware(), $middlewares);
+        return $this;
+    }
+
+    /**
      * Get the URI pattern for the route.
      *
      * @return string
@@ -94,5 +133,17 @@ class Route
     public function action(): \Closure
     {
         return $this->action;
+    }
+
+    /**
+     * Register a new GET route with the given `$uri` and `$action`.
+     *
+     * @param string $uri
+     * @param \Closure $action
+     * @return \Noovin\Routing\Route
+     */
+    public static function get(string $uri, \Closure $action): self
+    {
+        return Container::resolve(\Noovin\App::class)->router->get($uri, $action);
     }
 }
