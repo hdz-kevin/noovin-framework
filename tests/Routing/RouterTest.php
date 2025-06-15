@@ -4,6 +4,7 @@ namespace Noovin\Tests;
 
 use Noovin\Http\HttpMethod;
 use Noovin\Http\Request;
+use Noovin\Http\Response;
 use Noovin\Routing\Router;
 use Noovin\Server\Server;
 use PHPUnit\Framework\TestCase;
@@ -75,5 +76,33 @@ class RouterTest extends TestCase
             $this->assertEquals($uri, $route->uri());
             $this->assertEquals($action, $route->action());
         }
+    }
+
+    public function test_run_middlewares()
+    {
+        $middleware1 = new class {
+            public function handle(Request $req, \Closure $next): Response
+            {
+                return $next($req)->setHeader("X-Test-One", "one");
+            }
+        };
+
+        $middleware2 = new class {
+            public function handle(Request $req, \Closure $next): Response
+            {
+                return $next($req)->setHeader("X-Test-Two", "two");
+            }
+        };
+
+        $router = new Router();
+        $uri = "/test/uri";
+        $expectedResponse = Response::json(["message" => "Ok"]);
+        $router->get($uri, fn ($req) => $expectedResponse)
+                    ->setMiddlewares([$middleware1::class, $middleware2::class]);
+        $response = $router->resolve($this->createMockRequest($uri, HttpMethod::GET));
+
+        $this->assertEquals($expectedResponse, $response);
+        $this->assertEquals($response->headers("x-test-one"), "one");
+        $this->assertEquals($response->headers("x-test-two"), "two");
     }
 }

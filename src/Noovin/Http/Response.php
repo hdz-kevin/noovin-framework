@@ -102,13 +102,14 @@ class Response
     }
 
     /**
-     * Get response HTTP headers.
+     * Get HTTP headers.
+     * If a key is provided, returns the value for that key or null if it does not exist.
      *
      * @return array<string, string>
      */
-    public function headers(): array
+    public function headers(?string $key = null): array|string|null
     {
-        return $this->headers;
+        return is_null($key) ? $this->headers : ($this->headers[strtolower($key)] ?? null);
     }
 
     /**
