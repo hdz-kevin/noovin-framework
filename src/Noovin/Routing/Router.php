@@ -54,10 +54,30 @@ class Router
         $action = $route->action();
 
         if ($route->hasMiddlewares()) {
-            // Run middlewares before the final action
+            return $this->runMiddlewares($req, $route->middlewares(), $action);
         }
 
         return $action($req);
+    }
+
+    /**
+     * Run the middleware stack.
+     *
+     * @param Request $req
+     * @param \Noovin\Http\Middlewares\Middleware[] $middlewares
+     * @param \Closure $target
+     * @return Response
+     */
+    protected function runMiddlewares(Request $req, array $middlewares, \Closure $target): Response
+    {
+        if (count($middlewares) == 0) {
+            return $target($req);
+        }
+
+        return $middlewares[0]->handle(
+            $req,
+            fn (Request $request) => $this->runMiddlewares($request, array_slice($middlewares, 1), $target)
+        );
     }
 
     /**

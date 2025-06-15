@@ -136,7 +136,8 @@ class Request
      */
     public function setHeaders(array $headers): self
     {
-        $this->headers = array_map('strtolower', $headers);
+        $lowerKeys = array_map('strtolower', array_keys($headers));
+        $this->headers = array_combine($lowerKeys, $headers);
         return $this;
     }
 
