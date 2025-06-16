@@ -13,7 +13,9 @@ $app = App::bootstrap();
 Route::get("/middlewares", fn (Request $req) => Response::json(["message" => "Ok"]))
         ->setMiddlewares([AuthMiddleware::class]);
 
-Route::get("/html", fn (Request $req) => Response::view("home"));
+Route::get("/html", fn (Request $req) => Response::view("home", [
+    "user" => "Manolo",
+]));
 
 Route::get("/query", fn (Request $req) => Response::json(["query" => $req->query("page")]));
 

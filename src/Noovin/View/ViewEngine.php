@@ -4,5 +4,5 @@ namespace Noovin\View;
 
 interface ViewEngine
 {
-    public function render(string $view): string;
+    public function render(string $view, array $data = [], ?string $layout = null): string;
 }
