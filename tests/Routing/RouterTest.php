@@ -105,4 +105,31 @@ class RouterTest extends TestCase
         $this->assertEquals($response->headers("x-test-one"), "one");
         $this->assertEquals($response->headers("x-test-two"), "two");
     }
+
+    public function test_middleware_stack_can_be_stopped()
+    {
+        $stopMiddleware = new class {
+            public function handle(): Response
+            {
+                return Response::text("Stop Ok");
+            }
+        };
+        $secondMiddleware = new class {
+            public function handle(Request $req, \Closure $next): Response
+            {
+                return $next($req)->setHeader("X-Second", "second");
+            }
+        };
+
+        $router = new Router();
+        $uri = "/stop/middleware/stack";
+        $actionResponse = Response::json(["message" => "success"]);
+        $router->post($uri, fn ($req) => $actionResponse)
+                    ->setMiddlewares([$stopMiddleware::class, $secondMiddleware::class]);
+        $response = $router->resolve($this->createMockRequest($uri, HttpMethod::POST));
+
+        $this->assertNotEquals($actionResponse, $response);
+        $this->assertNull($response->headers("X-Second"));
+        $this->assertEquals("Stop Ok", $response->content());
+    }
 }
