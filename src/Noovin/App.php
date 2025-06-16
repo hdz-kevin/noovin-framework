@@ -9,6 +9,8 @@ use Noovin\Http\Response;
 use Noovin\Routing\Router;
 use Noovin\Server\PhpNativeServer;
 use Noovin\Server\Server;
+use Noovin\View\NoovinEngine;
+use Noovin\View\ViewEngine;
 
 /**
  * The main application class that initializes the router, server, and request.
@@ -21,12 +23,15 @@ class App
 
     public Server $server;
 
+    public ViewEngine $viewEngine;
+
     public static function bootstrap(): self
     {
         $app = Container::singleton(self::class);
         $app->router = new Router();
         $app->server = new PhpNativeServer();
         $app->request = $app->server->request();
+        $app->viewEngine = new NoovinEngine(__DIR__."/../../views");
 
         return $app;
     }

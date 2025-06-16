@@ -146,4 +146,16 @@ class Route
     {
         return Container::resolve(\Noovin\App::class)->router->get($uri, $action);
     }
+
+    /**
+     * Register a new POST route with the given `$uri` and `$action`.
+     *
+     * @param string $uri
+     * @param \Closure $action
+     * @return \Noovin\Routing\Route
+     */
+    public static function post(string $uri, \Closure $action): self
+    {
+        return Container::resolve(\Noovin\App::class)->router->post($uri, $action);
+    }
 }

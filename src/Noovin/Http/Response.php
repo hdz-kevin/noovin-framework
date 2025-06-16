@@ -2,6 +2,8 @@
 
 namespace Noovin\Http;
 
+use Noovin\Container\Container;
+
 /**
  * HTTP Response that will be sent to the client.
  */
@@ -63,6 +65,15 @@ class Response
         return (new self())
             ->setContentType("text/plain")
             ->setContent($text);
+    }
+
+    public static function view(string $view): self
+    {
+        $content = Container::resolve(\Noovin\App::class)->viewEngine->render($view);
+
+        return (new self())
+            ->setContentType("text/html")
+            ->setContent($content);
     }
 
     /**
