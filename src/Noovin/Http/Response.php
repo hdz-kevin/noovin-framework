@@ -2,8 +2,6 @@
 
 namespace Noovin\Http;
 
-use Noovin\Container\Container;
-
 /**
  * HTTP Response that will be sent to the client.
  */
@@ -69,7 +67,7 @@ class Response
 
     public static function view(string $view, array $data = [], ?string $layout = null): self
     {
-        $content = Container::resolve(\Noovin\App::class)
+        $content = app()
                     ->viewEngine
                     ->render($view, $data, $layout);
 
@@ -81,15 +79,15 @@ class Response
     /**
      * Create a new redirect response.
      *
-     * @param string $url
+     * @param string $uri
      * @param integer $status
      * @return self
      */
-    public static function redirect(string $url, int $status = 302): self
+    public static function redirect(string $uri, int $status = 302): self
     {
         return (new self())
             ->setStatus($status)
-            ->setHeader("Location", $url);
+            ->setHeader("Location", $uri);
     }
 
     /**

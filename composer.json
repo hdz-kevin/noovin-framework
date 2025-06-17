@@ -6,7 +6,11 @@
     "autoload": {
         "psr-4": {
             "Noovin\\": "src/Noovin"
-        }
+        },
+        "files": [
+            "src/Noovin/Helpers/app.php",
+            "src/Noovin/Helpers/http.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

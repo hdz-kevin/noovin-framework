@@ -2,8 +2,6 @@
 
 namespace Noovin\Routing;
 
-use Noovin\Container\Container;
-
 /**
  * Contains a uri definition and its associated action.
  */
@@ -144,7 +142,7 @@ class Route
      */
     public static function get(string $uri, \Closure $action): self
     {
-        return Container::resolve(\Noovin\App::class)->router->get($uri, $action);
+        return app()->router->get($uri, $action);
     }
 
     /**
@@ -156,6 +154,6 @@ class Route
      */
     public static function post(string $uri, \Closure $action): self
     {
-        return Container::resolve(\Noovin\App::class)->router->post($uri, $action);
+        return app()->router->post($uri, $action);
     }
 }

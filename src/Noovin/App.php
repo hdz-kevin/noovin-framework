@@ -2,7 +2,6 @@
 
 namespace Noovin;
 
-use Noovin\Container\Container;
 use Noovin\Http\HttpNotFoundException;
 use Noovin\Http\Request;
 use Noovin\Http\Response;
@@ -27,7 +26,7 @@ class App
 
     public static function bootstrap(): self
     {
-        $app = Container::singleton(self::class);
+        $app = singleton(self::class);
         $app->router = new Router();
         $app->server = new PhpNativeServer();
         $app->request = $app->server->request();

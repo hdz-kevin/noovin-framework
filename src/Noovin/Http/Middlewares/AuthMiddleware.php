@@ -10,7 +10,7 @@ class AuthMiddleware implements Middleware
     public function handle(Request $req, \Closure $next): Response
     {
         if ($req->headers("Authorization") != "token") {
-            return Response::json(["msg" => "Unauthorized"])->setStatus(401);
+            return json(["msg" => "Unauthorized"])->setStatus(401);
         }
 
         return $next($req);
